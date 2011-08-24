@@ -1,6 +1,5 @@
 # Code for client
 # by nowa<nowazhu@gmail.com> 2011-07-23
-
 module RTFS
 	TFSTOOL_PATH = "/home/admin/tfs/bin/tfstool"
 
@@ -8,6 +7,9 @@ module RTFS
 		attr_accessor :ns_addr
 		attr_accessor :tfstool_path
 	
+	  # å‚æ•°:
+	  #   :ns_addr          TFS æœåŠ¡å™¨åœ°å€ï¼Œå¦‚ 127.0.0.1:3100
+	  #   :tfstool_path     tfstool å®‰è£…è·¯å¾„ï¼Œé»˜è®¤ /home/admin/tfs/bin/tfstool
 		def initialize(options)
 			return nil unless options
 			@ns_addr = options[:ns_addr]
@@ -15,19 +17,24 @@ module RTFS
 			raise NoTFSToolError.new unless File.exist?(@tfstool_path)
 		end
 		
-		# ´Ótfs»ñÈ¡ÎÄ¼ş
-		def get_file(tfs_name, local_file=nil)
+		# è·å–æ–‡ä»¶
+		def get(tfs_name, local_file=nil)
 			local_file ||= tfs_name
 			`#{tfstool_cmd} -i "get #{tfs_name} #{local_file}"`
 		end
 		
-		# ·ÅÖÃÎÄ¼şµ½tfs²¢·µ»ØÎÄ¼şµÄtfsname
-		# tfsname example: T1lpVcXftHXXaCwpjX
-		def put_file(local_file, tfs_name="NULL", suffix=nil)
-			suffix ||= ".#{local_file.split(".").last}"
-			result = `#{tfstool_cmd} -i "put #{local_file} #{tfs_name} #{suffix}"`
+		# ä¸Šä¼ æ–‡ä»¶
+		# å‚æ•°:
+		#   file_path     éœ€è¦ä¸Šä¼ çš„æ–‡ä»¶è·¯å¾„
+		#   :ext          æ‰©å±•åï¼Œé»˜è®¤ä¼šå– file_path çš„æ‰©å±•å, å¦‚: .jpg
+		# è¿”å›å€¼
+		#   T1lpVcXftHXXaCwpjX
+		def put(file_path, options = {})
+		  ext = options[:ext] || File.extname(file_path)
+		  tfs_name = "NULL"
+			result = `#{tfstool_cmd} -i "put #{file_path} #{tfs_name} #{ext}"`
 			# puts "result: #{result}"
-			t = nil
+			t = nil 
 			if result.include?("=> ")
 				result = result.split("=> ").last
 				if result.include?(",")
@@ -37,26 +44,25 @@ module RTFS
 			t.nil? ? nil : t
 		end
 		
-		# ·ÅÖÃÎÄ¼şµ½tfs²¢·µ»ØÎÄ¼şµÄ¿É·ÃÎÊcdn url
-		def put_file_and_get_url(local_file, tfs_name="NULL", suffix=nil)
-			suffix ||= ".#{local_file.split(".").last}"
-			t = put_file(local_file, tfs_name, suffix)
-			t.nil? ? nil : "http://img03.taobaocdn.com/tfscom/#{t}#{suffix}"
+		# ä¸Šä¼ æ–‡ä»¶ å¹¶è¿”å›å®Œæ•´ url (only for Taobao)
+		def put_and_get_url(file_path, options = {})
+			ext = options[:ext] || File.extname(file_path)
+			t = put(file_path, :ext => ext)
+			t.nil? ? nil : "http://img03.taobaocdn.com/tfscom/#{t}#{ext}"
 		end
 		
-		# É¾³ıtfs file
-		def rm_file(tfs_name)
+		# åˆ é™¤æ–‡ä»¶, ä¸èƒ½å¸¦æ‰©å±•å
+		def rm(tfs_name)
 			`#{tfstool_cmd} -i "rm #{tfs_name}"`
 		end
 		
-		# ÖØÃüÃûtfs file£¬²»ÍÆ¼öÊ¹ÓÃ
-		# new name ±ØĞëÒ²ÊÇ tfsname ¸ñÊ½
-		def rename_file(tfs_name, new_name)
+		# æ”¹å, ä¸èƒ½å¸¦æ‰©å±•å
+		def rename(tfs_name, new_name)
 			`#{tfstool_cmd} -i "rename #{tfs_name} #{new_name}"`
 		end
 		
-		# »ñÈ¡tfs fileµÄstat
-		def file_stat(tfs_name)
+		# æ–‡ä»¶ä¿¡æ¯æŸ¥çœ‹, ä¸èƒ½å¸¦æ‰©å±•å
+		def stat(tfs_name)
 			result = `#{tfstool_cmd} -i "stat #{tfs_name}"`
 			stat = {}
 			result.split("\n").each do |line|
@@ -73,8 +79,8 @@ module RTFS
 	end
 	
 	class NoTFSToolError < RuntimeError
-	    def to_s
-	      "You must install tfs from yum or source first!"
-	    end
+    def to_s
+      "You must install tfs from yum or source first!"
+    end
 	end # NoTFSToolError
 end
