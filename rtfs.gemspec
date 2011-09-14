@@ -1,7 +1,7 @@
 # Generated: Tue Aug 02 01:30:40 UTC 2011
 Gem::Specification.new do |s|
   s.name = "rtfs"
-  s.version = "0.0.3"
+  s.version = "0.0.4"
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
   s.extra_rdoc_files = ["README","CHANGES","MIT-LICENSE",]
