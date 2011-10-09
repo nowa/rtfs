@@ -6,7 +6,7 @@ spec:
   require_path: lib
   has_rdoc: false
   extra_rdoc_files:
-  - README
+  - README.markdown
   - CHANGES
   - MIT-LICENSE
   autorequire: rtfs

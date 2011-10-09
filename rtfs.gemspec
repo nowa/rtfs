@@ -1,10 +1,10 @@
-# Generated: Tue Aug 02 01:30:40 UTC 2011
+# Generated: Sun Oct 09 04:07:05 UTC 2011
 Gem::Specification.new do |s|
   s.name = "rtfs"
-  s.version = "0.0.3"
+  s.version = "0.0.4"
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
-  s.extra_rdoc_files = ["README","CHANGES","MIT-LICENSE",]
+  s.extra_rdoc_files = ["README.markdown","CHANGES","MIT-LICENSE",]
   s.summary = "RTFS is a Ruby Client for TFS."
   s.author = "Nowa Zhu"
   s.email = "nowazhu@gmail.com"

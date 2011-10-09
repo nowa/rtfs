@@ -4,7 +4,7 @@
 module RTFS::Version
   MAJOR = 0
   MINOR = 0
-  REVISION = 3
+  REVISION = 4
   
   class << self
     # Returns X.Y.Z formatted version string
