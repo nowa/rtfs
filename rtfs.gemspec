@@ -14,5 +14,4 @@ Gem::Specification.new do |s|
 #  s.require_path = "lib"
   s.files = ["lib/rtfs/meta.rb","lib/rtfs/version.rb","lib/rtfs/client.rb","lib/rtfs/wrapper.rb","lib/rtfs.rb",]
   s.bindir = 'bin'
-  s.executables = ['top4rsh']
 end
