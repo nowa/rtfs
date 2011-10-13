@@ -14,7 +14,10 @@ module RTFS
       return nil unless options
       @ns_addr = options[:ns_addr]
       @tfstool_path = options[:tfstool_path] ? options[:tfstool_path] : TFSTOOL_PATH
-      raise NoTFSToolError.new unless File.exist?(@tfstool_path)
+			if not File.exist?(@tfstool_path)
+				puts "[RTFS] debuger: #{@tfstool_path}"
+        raise NoTFSToolError.new
+			end
     end
     
     # 获取文件
