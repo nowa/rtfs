@@ -1,3 +1,8 @@
+=== 0.1.0 / 2012-04-25
+
+* 添加webservice方式
+* Client.new方式改成Client.tfs
+
 === 0.0.1 / 2011-08-02
 
 * Birthday!

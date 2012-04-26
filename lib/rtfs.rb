@@ -16,9 +16,11 @@ require 'nice-ffi'
 require 'yaml'
 
 # require_local 'rtfs/wrapper.rb'
-require_local 'rtfs/client.rb'
-require_local 'rtfs/meta.rb'
-require_local 'rtfs/version.rb'
+require 'rtfs/client.rb'
+require 'rtfs/web_service.rb'
+require 'rtfs/tfstool.rb'
+require 'rtfs/meta.rb'
+require 'rtfs/version.rb'
 
 # tfs = RTFS::Client.new({:ns_addr => '10.246.65.210:3100'})
 # puts "tfsname: '#{tfs.put_file_and_get_url("/home/xifeng/1.png")}'"

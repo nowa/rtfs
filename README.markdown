@@ -20,6 +20,7 @@ config/tfs.yml
 
     defaults: &defaults
       host: '127.0.0.1:3100'
+      appkey: "......."
 
     development:
       <<: *defaults
@@ -34,7 +35,9 @@ config/initialize/tfs.rb
 
     require 'rtfs'
     tfs_config = YAML.load_file("#{Rails.root}/config/tfs.yml")[Rails.env]
-    $tfs = RTFS::Client.new(:ns_addr => tfs_config['host'])
+    $tfs = RTFS::Client.tfs(tfs_config.merge({:ns_addr => tfs_config['host']}))
+
+:ns_addr include http:// tfs used webservice
 
 Configure without TFS install
 -----------------------------
@@ -93,7 +96,7 @@ config/initialize/tfs.rb
       $tfs = FakeTfs::Client.new(:ns_addr => tfs_config['host'])
     else
       require 'rtfs'
-      $tfs = RTFS::Client.new(:ns_addr => tfs_config['host'])
+      $tfs = RTFS::Client.tfs(tfs_config.merge({:ns_addr => tfs_config['host']}))
     end
 
 

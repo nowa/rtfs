@@ -1,7 +1,7 @@
 # Generated: Sun Oct 09 04:07:05 UTC 2011
 Gem::Specification.new do |s|
   s.name = "rtfs"
-  s.version = "0.0.5"
+  s.version = "0.1.0"
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
   s.extra_rdoc_files = ["README.markdown","CHANGES","MIT-LICENSE",]
@@ -9,9 +9,10 @@ Gem::Specification.new do |s|
   s.author = "Nowa Zhu"
   s.email = "nowazhu@gmail.com"
   s.homepage = "https://github.com/nowa/rtfs"
-  s.rubyforge_project = "rtfs"
   s.add_dependency("nice-ffi", ">=0.4")
-#  s.require_path = "lib"
-  s.files = ["lib/rtfs/meta.rb","lib/rtfs/version.rb","lib/rtfs/client.rb","lib/rtfs/wrapper.rb","lib/rtfs.rb",]
+  s.add_dependency("rest-client", ">=1.6.0")
+  s.files         = `git ls-files`.split("\n")
+  s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
+  s.require_paths = ["lib"]
   s.bindir = 'bin'
 end
