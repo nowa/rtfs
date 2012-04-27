@@ -13,10 +13,10 @@ module RTFS
       return nil unless options
       @ns_addr = options[:ns_addr]
       @tfstool_path = options[:tfstool_path] ? options[:tfstool_path] : TFSTOOL_PATH
-            if not File.exist?(@tfstool_path)
-                puts "[RTFS] debuger: #{@tfstool_path}"
+      if not File.exist?(@tfstool_path)
+        puts "[RTFS] debuger: #{@tfstool_path}"
         raise NoTFSToolError.new
-            end
+      end
     end
     
     # 获取文件
@@ -85,5 +85,4 @@ module RTFS
       "You must install tfs from yum or source first!"
     end
   end # NoTFSToolError
-
 end

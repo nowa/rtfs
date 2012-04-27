@@ -1,6 +1,6 @@
-# Ê¹ÓÃffiºÍnice-ffiÀ´µ÷ÓÃ¶¯Ì¬¿âµÄc½Ó¿Ú
-# tfsclient c apiÄ¿Ç°ÉĞ²»ÍêÉÆ£¬»ùÓÚc½Ó¿ÚµÄ·â×°µ÷ÓÃ²»ÄÜÂú×ãĞèÇó
-# Òò´ËÄ¿Ç°²»Ê¹ÓÃ¸Ãwrapper£¬ÎÄ¼şÔİ´æ
+# ä½¿ç”¨ffiå’Œnice-ffiæ¥è°ƒç”¨åŠ¨æ€åº“çš„cæ¥å£
+# tfsclient c apiç›®å‰å°šä¸å®Œå–„ï¼ŒåŸºäºcæ¥å£çš„å°è£…è°ƒç”¨ä¸èƒ½æ»¡è¶³éœ€æ±‚
+# å› æ­¤ç›®å‰ä¸ä½¿ç”¨è¯¥wrapperï¼Œæ–‡ä»¶æš‚å­˜
 # by nowa<nowazhu@gmail.com> 2011-07-23
 
 module LibC
@@ -53,7 +53,7 @@ module LibRTFS
 	attach_function :t_unlink, [:string, :string, :int], :int
 end 
 
-# ÏÂÃæÕâ²¿·Ö´úÂë½ö¹©²âÊÔLibRTFS
+# ä¸‹é¢è¿™éƒ¨åˆ†ä»£ç ä»…ä¾›æµ‹è¯•LibRTFS
 # LibRTFS.t_initialize("10.232.35.32:3100", 5, 1000)
 # fd = LibRTFS.t_open("test", ".png", nil, 2, nil)
 # puts "fd: #{fd}"
