@@ -1,17 +1,24 @@
 # coding: utf-8
 require 'rest-client'
+require 'open-uri'
 require "json"
 
 module RTFS
   class WebService
 
     attr_accessor :appkey
-    attr_accessor :ns_addr
+    attr_accessor :ns_addrs
 
     def initialize(options)
       return nil unless options
-      @ns_addr = options[:ns_addr]
+      # 通过 ns_addr 的地址获取负载均衡的地址
+      @ns_addrs ||= open("#{options[:ns_addr]}/tfs.list").read.split("\n")
       @appkey  = options[:appkey]
+    end
+
+    # 随机取一个 ns_addr 用于访问
+    def ns_addr
+      @ns_addrs[rand(@ns_addrs.size)]
     end
 
     # 获取文件
@@ -68,7 +75,7 @@ module RTFS
 
       def get_url(url,opts = {})
         return url unless opts
-        url = "#{@ns_addr}#{url}"
+        url = "#{self.ns_addr}#{url}"
         params = []
         opts.each{ |k,v|
           params << "#{k}=#{v}"

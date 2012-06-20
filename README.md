@@ -1,7 +1,7 @@
 RTFS
 ====
 
-RTFS is a Ruby Client for TFS.  
+RTFS is a Ruby Client for TFS.
 
 [About TFS](http://code.taobao.org/project/view/366/)
 
@@ -11,7 +11,14 @@ Requirements
 ------------
 
 * Linux System (TFS only success build in Linux system.)
-* TFS 
+* TFS
+
+INSTALL
+-------
+
+```bash
+$ gem install rtfs
+```
 
 Configure
 ---------
@@ -23,7 +30,7 @@ config/tfs.yml
 ```yaml
 defaults: &defaults
   host: '127.0.0.1:3100'
-  # or use WebService 
+  # or use WebService
   host: 'http://127.0.0.1:3900'
   appkey: "......."
 
@@ -36,7 +43,7 @@ test:
 production:
   <<: *defaults
 ```
-      
+
 config/initialize/tfs.rb
 
 ```ruby
@@ -69,7 +76,7 @@ class User < ActiveRecord::Base
   end
 end
 ```
-    
+
 Put local file to TFS
 
 ```bash
