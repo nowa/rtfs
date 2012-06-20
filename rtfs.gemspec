@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.version = "0.1.0"
   s.platform = Gem::Platform::RUBY
   s.has_rdoc = true
-  s.extra_rdoc_files = ["README.markdown","CHANGES","MIT-LICENSE",]
+  s.extra_rdoc_files = ["README.md","CHANGES.md","MIT-LICENSE",]
   s.summary = "RTFS is a Ruby Client for TFS."
   s.author = "Nowa Zhu"
   s.email = "nowazhu@gmail.com"

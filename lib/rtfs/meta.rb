@@ -1,3 +1,4 @@
+# coding: utf-8
 # meta.rb contains <tt>Top4R::Meta</tt> and related classes that
 # help define the metadata of the <tt>Top4R</tt> project.
 
@@ -20,24 +21,24 @@ class RTFS::Meta #:nodoc:
     s = ryaml.result(binding)
     YAML.load(s)
   end
-  
+
   # Returns RubyGems spec information
   def spec_info
     self.pkg_info['spec'] if self.pkg_info
   end
-  
+
   # Returns list of project files
   def project_files
     @project_files ||= Dir.glob(File.join(@root_dir, 'lib/**/*.rb'))
     @project_files
   end
-  
+
   # Returns list of specification files
   def spec_files
     @spec_files ||= Dir.glob(File.join(@root_dir, 'spec/**/*_spec.rb'))
     @spec_files
   end
-  
+
   # Returns RubyGem specification for Top4R project
   def gem_spec
     @gem_spec ||= Gem::Specification.new do |spec|

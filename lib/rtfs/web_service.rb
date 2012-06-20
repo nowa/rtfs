@@ -1,4 +1,4 @@
-# encoding utf-8
+# coding: utf-8
 require 'rest-client'
 require "json"
 
@@ -11,14 +11,14 @@ module RTFS
     def initialize(options)
       return nil unless options
       @ns_addr = options[:ns_addr]
-      @appkey = options[:appkey]
+      @appkey  = options[:appkey]
     end
-      
+
     # 获取文件
     def get(tfs_name, local_file=nil)
       RestClient.get(get_url("/v1/#{appkey}/#{tfs_name}"))
     end
-    
+
     # 上传文件
     # 参数:
     #   file_path     需要上传的文件路径
@@ -31,25 +31,25 @@ module RTFS
       json = JSON.parse(response)
       json && json["TFS_FILE_NAME"] ? json["TFS_FILE_NAME"] : nil
     end
-    
+
     # 上传文件 并返回完整 url (only for Taobao)
     def put_and_get_url(file_path, options = {})
       ext = options[:ext] || File.extname(file_path)
       t = put(file_path, :ext => ext)
       t.nil? ? nil : "http://img0#{rand(4)+1}.taobaocdn.com/tfscom/#{t}#{ext}"
     end
-    
+
     # 删除文件, 不能带扩展名
     def rm(tfs_name,options = {})
       response = RestClient.delete(get_url("/v1/#{appkey}/#{tfs_name}", options))
       response && response.code == 200 ? true : nil
     end
-    
+
     # 改名, 不能带扩展名
     def rename(tfs_name, new_name)
       #`#{tfstool_cmd} -i "rename #{tfs_name} #{new_name}"`
     end
-    
+
     # 文件信息查看, 不能带扩展名
     def stat(tfs_name,options = {})
       response = RestClient.get(get_url("/v1/#{appkey}/metadata/#{tfs_name}", options))

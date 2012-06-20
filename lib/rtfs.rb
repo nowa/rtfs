@@ -1,8 +1,6 @@
+# coding: utf-8
 # TFS Client for Ruby
 # by nowa<nowazhu@gmail.com> 2011-07-23
-
-#!/usr/local/bin/ruby
-
 $:.unshift(File.dirname(__FILE__))
 
 module RTFS; end

@@ -1,3 +1,4 @@
+# coding: utf-8
 module RTFS
 
   TFSTOOL_PATH = "/home/admin/tfs/bin/tfstool"
@@ -5,7 +6,7 @@ module RTFS
 
     attr_accessor :ns_addr
     attr_accessor :tfstool_path
-  
+
     # 参数:
     #   :ns_addr          TFS 服务器地址，如 127.0.0.1:3100
     #   :tfstool_path     tfstool 安装路径，默认 /home/admin/tfs/bin/tfstool
@@ -18,13 +19,13 @@ module RTFS
         raise NoTFSToolError.new
       end
     end
-    
+
     # 获取文件
     def get(tfs_name, local_file=nil)
       local_file ||= tfs_name
       `#{tfstool_cmd} -i "get #{tfs_name} #{local_file}"`
     end
-    
+
     # 上传文件
     # 参数:
     #   file_path     需要上传的文件路径
@@ -36,7 +37,7 @@ module RTFS
       tfs_name = "NULL"
       result = `#{tfstool_cmd} -i "put #{file_path} #{tfs_name} #{ext}"`
       # puts "result: #{result}"
-      t = nil 
+      t = nil
       if result.include?("=> ")
         result = result.split("=> ").last
         if result.include?(",")
@@ -45,24 +46,24 @@ module RTFS
       end
       t.nil? ? nil : t
     end
-    
+
     # 上传文件 并返回完整 url (only for Taobao)
     def put_and_get_url(file_path, options = {})
       ext = options[:ext] || File.extname(file_path)
       t = put(file_path, :ext => ext)
       t.nil? ? nil : "http://img03.taobaocdn.com/tfscom/#{t}#{ext}"
     end
-    
+
     # 删除文件, 不能带扩展名
     def rm(tfs_name)
       `#{tfstool_cmd} -i "rm #{tfs_name}"`
     end
-    
+
     # 改名, 不能带扩展名
     def rename(tfs_name, new_name)
       `#{tfstool_cmd} -i "rename #{tfs_name} #{new_name}"`
     end
-    
+
     # 文件信息查看, 不能带扩展名
     def stat(tfs_name)
       result = `#{tfstool_cmd} -i "stat #{tfs_name}"`
@@ -73,13 +74,13 @@ module RTFS
       end
       stat
     end
-    
+
     protected
       def tfstool_cmd
         "#{@tfstool_path} -n -s #{@ns_addr}"
       end
   end
-  
+
   class NoTFSToolError < RuntimeError
     def to_s
       "You must install tfs from yum or source first!"
