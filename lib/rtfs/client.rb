@@ -2,6 +2,7 @@
 # Code for client
 # by nowa<nowazhu@gmail.com> 2011-07-23
 require 'rest-client'
+require 'open-uri'
 require 'digest'
 
 module RTFS
@@ -44,8 +45,9 @@ module RTFS
     #   T1lpVcXftHXXaCwpjX
     def put(path, options = {})
       ext = options[:ext] || File.extname(path)
+      path = path.to_s
       resp = http_post("/v1/#{appkey}",
-                       File.open(fpath(path)).read,
+                       File.open(path.start_with?('/') ? path : fpath(path)).read,
                        :params => {
                          :suffix => ext,
                          :simple_name => options[:simple_name] || 0
@@ -59,6 +61,7 @@ module RTFS
     # 上传文件 并返回完整 url (only for Taobao)
     def put_and_get_url(path, options = {})
       ext = options[:ext] || File.extname(path)
+      path = path.to_s
       tname = put(path, :ext => ext)
 
       "http://img0#{rand(4)+1}.taobaocdn.com/tfscom/#{t}#{ext}" unless tname.nil?
@@ -81,6 +84,8 @@ module RTFS
     end
 
     def save(path, options = {})
+      path = path.to_s
+
       if finger(path)
         del(path)
         save(path)
@@ -90,16 +95,16 @@ module RTFS
     end
 
     def create(path, options = {})
-      resp = http_post(furl(path),
-                       nil,
+      resp = http_post(furl(path), nil,
                        :params => {:recursive => 1})
 
       resp && resp.code == 201
     end
 
     def write(path, options = {})
-      resp = http_put(furl(path),
-                      File.open(fpath(path)).read,
+      data = File.open(fpath(path)).read
+      return if data.length == 0
+      resp = http_put(furl(path), data,
                       :params => {:offset => 0})
 
       if resp && resp.code == 200
