@@ -1,6 +1,9 @@
 # coding: utf-8
 # Code for client
 # by nowa<nowazhu@gmail.com> 2011-07-23
+require 'rest-client'
+require 'digest'
+
 module RTFS
 
   class Client
@@ -20,8 +23,12 @@ module RTFS
       @nameservers = open("#{options[:ns_addr]}/tfs.list").read.split("\n")
       @appkey = options[:appkey]
 
-      @uid = options[:uid]
       @basedir = options[:basedir]
+      @uid = options[:uid]
+
+      if @uid.nil? && !@basedir.nil?
+        (Digest::MD5.hexdigest(@basedir).to_i(16) % 10000)
+      end
     end
 
     # 获取文件
@@ -35,10 +42,10 @@ module RTFS
     #   :ext          扩展名，默认会取 file_path 的扩展名, 如: .jpg
     # 返回值
     #   T1lpVcXftHXXaCwpjX
-    def put(fpath, options = {})
-      ext = options[:ext] || File.extname(fpath)
+    def put(path, options = {})
+      ext = options[:ext] || File.extname(path)
       resp = http_post("/v1/#{appkey}",
-                       File.open(fpath).read,
+                       File.open(fpath(path)).read,
                        :params => {
                          :suffix => ext,
                          :simple_name => options[:simple_name] || 0
@@ -50,9 +57,9 @@ module RTFS
     end
 
     # 上传文件 并返回完整 url (only for Taobao)
-    def put_and_get_url(fpath, options = {})
-      ext = options[:ext] || File.extname(fpath)
-      tname = put(fpath, :ext => ext)
+    def put_and_get_url(path, options = {})
+      ext = options[:ext] || File.extname(path)
+      tname = put(path, :ext => ext)
 
       "http://img0#{rand(4)+1}.taobaocdn.com/tfscom/#{t}#{ext}" unless tname.nil?
     end
@@ -73,26 +80,26 @@ module RTFS
       end
     end
 
-    def save(fpath, options = {})
-      if finger(fpath, options)
-        del(fpath, options)
-        save(fpath, options)
-      elsif create(fpath, options)
-        write(fpath, options)
+    def save(path, options = {})
+      if finger(path)
+        del(path)
+        save(path)
+      elsif create(path)
+        write(path)
       end
     end
 
-    def create(fpath, options = {})
-      resp = http_post(furl(options[:path] || basepath(fpath)),
+    def create(path, options = {})
+      resp = http_post(furl(path),
+                       nil,
                        :params => {:recursive => 1})
 
       resp && resp.code == 201
     end
 
-    def write(fpath, options = {})
-      path = options[:path] || basepath(fpath)
+    def write(path, options = {})
       resp = http_put(furl(path),
-                      File.open(fpath).read,
+                      File.open(fpath(path)).read,
                       :params => {:offset => 0})
 
       if resp && resp.code == 200
@@ -100,15 +107,15 @@ module RTFS
       end
     end
 
-    def del(fpath, options = {})
-      resp = http_delete(furl(options[:path] || basepath(fpath)))
+    def del(path, options = {})
+      resp = http_delete(furl(path))
 
       resp && resp.code == 200
     end
 
-    def finger(fpath, options = {})
+    def finger(path, options = {})
       begin
-        resp = http_head(furl(options[:path] || basepath(fpath)))
+        resp = http_head(furl(path))
 
         resp && resp.code == 200
       rescue RestClient::ResourceNotFound
@@ -183,8 +190,8 @@ module RTFS
       "/v2/#{appkey}/#{appid}/#{fuid(path)}/file/#{path}"
     end
 
-    def basepath(fpath)
-      @basedir ? fpath.sub(@basedir, '').sub(/^\//, '') : File.basename(fpath)
+    def fpath(path)
+      @basedir ? File.join(@basedir, path) : path
     end
   end
 end

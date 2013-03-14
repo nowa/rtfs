@@ -105,24 +105,29 @@ API
 ---
 
 ```ruby
-# initialize client
+# initialize client.
 tfs = RTFS::Client.new(:ns_addr => 'http://127.0.0.1:3800',
-                       :appkey  => 'myprecious')
+                       :appkey  => 'myprecious',
+                       :basedir => Rails.root.join('public'))
 
-# simply put file
+# simply put file.
 tfs.put('foo.jpg')          # ==> T1Ub1XXeFBXXb1upjX
 
-# stat file
+# stat file.
 tfs.stat('T1Ub1XXeFBXXb1upjX')
 
-# remove file
+# remove file.
 tfs.rm('T1Ub1XXeFBXXb1upjX')
 
-# put named file, keep that name in TFS
+# put named file, keep that name in TFS.
 tfs.save('foo.jpg')         # ==> 133/7463/foo.jpg
 
-# remove named file
+# remove named file.
 tfs.del('foo.jpg')          # ==> true
+
+# put files under public folder, and preserve its name.
+# will prepend the basedir in front of the file path passed in.
+tfs.save('jquery.js')
 ```
 
 
