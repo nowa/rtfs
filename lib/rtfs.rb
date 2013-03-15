@@ -10,13 +10,10 @@ def require_local(suffix)
 end
 
 require 'rubygems'
-require 'nice-ffi'
 require 'yaml'
 
 # require_local 'rtfs/wrapper.rb'
 require 'rtfs/client.rb'
-require 'rtfs/web_service.rb'
-require 'rtfs/tfstool.rb'
 require 'rtfs/meta.rb'
 require 'rtfs/version.rb'
 
