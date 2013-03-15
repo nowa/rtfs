@@ -1,19 +1,30 @@
 RTFS
 ====
 
-RTFS is a Ruby Client for TFS.
+RTFS is a Ruby Client of [TFS](http://code.taobao.org/project/view/366/).
 
-[About TFS](http://code.taobao.org/project/view/366/)
+For TFS integration with CarrierWave, see
+[carrierwave-tfs](http://github.com/huacnlee/carrierwave-tfs) for more
+information.
 
-This is basicly library for TFS access, you can use [carrierwave-tfs](http://github.com/huacnlee/carrierwave-tfs) for Carrierwave.
 
 Requirements
 ------------
 
-* Linux System (TFS only success build in Linux system.)
-* TFS
+* <del>Linux System (tfstool can only be built on Linux Systems).</del>
+* <del>tfstool</del>
 
-INSTALL
+2013-03-14
+
+These are no longer valid requirements. TFS now favors
+[Web Service API](http://baike.corp.taobao.com/index.php/CS_RD/tfs/use_web_service),
+which requires nothing but a decent REST client of the language you choose.
+
+See the [official documentation](http://baike.corp.taobao.com/index.php/CS_RD/tfs)
+for more information about APIs and service applications.
+
+
+Install
 -------
 
 ```bash
@@ -23,16 +34,16 @@ $ gem install rtfs
 Configure
 ---------
 
-create this files before using.
+or How to integrate into Rails app.
 
-config/tfs.yml
+Create `tfs.yml` in your rails app's config directory. The content of it should
+look like this:
 
 ```yaml
+# config/tfs.yml
 defaults: &defaults
-  host: '127.0.0.1:3100'
-  # or use WebService
   host: 'http://127.0.0.1:3900'
-  appkey: "......."
+  appkey: "myprecious"
 
 development:
   <<: *defaults
@@ -44,21 +55,24 @@ production:
   <<: *defaults
 ```
 
-config/initialize/tfs.rb
+Create an initializer too. Call it `tfs.rb` or whatever filename you fancy:
+
 
 ```ruby
+# config/initializers/tfs.rb
 require 'rtfs'
 tfs_config = YAML.load_file("#{Rails.root}/config/tfs.yml")[Rails.env]
 $tfs = RTFS::Client.tfs(tfs_config.merge({:ns_addr => tfs_config['host']}))
 ```
 
-:ns_addr include http:// tfs used webservice
+Then `$tfs` will be available as a global object.
 
 
-Usage
------
+Simple Usage
+------------
 
 ```ruby
+# app/controllers/users_controller.rb
 class UsersController < ApplicationController
   def save
     @user = User.new
@@ -68,7 +82,7 @@ class UsersController < ApplicationController
   end
 end
 
-
+# app/models/user.rb
 class User < ActiveRecord::Base
   def avatar_url
     server_id = self.id % 4 + 1
@@ -77,9 +91,47 @@ class User < ActiveRecord::Base
 end
 ```
 
-Put local file to TFS
+Put local file into TFS server:
 
 ```bash
+$ bundle exec rails c
 irb> $tfs.put("~/Downloads/a.jpg")
 T1Ub1XXeFBXXb1upjX
 RTFS
+```
+
+
+API
+---
+
+```ruby
+# initialize client.
+tfs = RTFS::Client.new(:ns_addr => 'http://127.0.0.1:3800',
+                       :appkey  => 'myprecious',
+                       :basedir => Rails.root.join('public'))
+
+# simply put file.
+tfs.put('foo.jpg')          # ==> T1Ub1XXeFBXXb1upjX
+
+# stat file.
+tfs.stat('T1Ub1XXeFBXXb1upjX')
+
+# remove file.
+tfs.rm('T1Ub1XXeFBXXb1upjX')
+
+# put named file, keep that name in TFS.
+tfs.save('foo.jpg')         # ==> 133/7463/foo.jpg
+
+# remove named file.
+tfs.del('foo.jpg')          # ==> true
+
+# put files under public folder, and preserve its name.
+# will prepend the basedir in front of the file path passed in.
+tfs.save('jquery.js')
+```
+
+
+Executabes?
+-----------
+
+RTFS will be available as a executable binary soon. Stay tuned...
