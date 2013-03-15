@@ -1,7 +1,10 @@
 # coding: utf-8
+$:.push File.expand_path("../lib", __FILE__)
+require "rtfs"
+
 Gem::Specification.new do |s|
   s.name             = 'rtfs'
-  s.version          = '0.2.0'
+  s.version          = RTFS::Version.to_version
   s.platform         = Gem::Platform::RUBY
 
   s.has_rdoc         = true
@@ -23,5 +26,7 @@ Gem::Specification.new do |s|
   s.bindir           = 'bin'
 
   s.add_dependency('rest-client', '>=1.6.0')
+  s.add_development_dependency('json')
+  s.add_development_dependency('rest-client', '>=1.6.0')
   s.add_development_dependency('rspec', '~> 2.5')
 end

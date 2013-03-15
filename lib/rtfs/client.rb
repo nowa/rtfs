@@ -4,6 +4,7 @@
 require 'rest-client'
 require 'open-uri'
 require 'digest'
+require 'json'
 
 module RTFS
 
