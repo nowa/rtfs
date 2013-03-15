@@ -146,7 +146,7 @@ tfs.save('foo/ham.jpg')
  3. 创建这个文件，相当于 UNIX 中的 `touch` 命令，不写入实际内容，文件内容为空，
  4. 尝试打开 `basedir` 与传入的 `foo/ham.jpg` 拼起来的路径，在此例中，即：
     `Rails.root.join('public', 'foo/ham.jpg')`
- 5. 将改文件数据写入 TFS
+ 5. 将该文件数据写入 TFS
 
 在这中间，有个概念需要说明，自定义路径中，有一层叫做 uid（User ID），目的是分散文件位置，
 避免数据读写过度集中。如果希望把 TFS 当 CDN 用，则需要固定这个 uid，可以在实例化 `RTFS::Client`
@@ -168,4 +168,4 @@ tfs.uid = 10001
 Executabes?
 -----------
 
-RTFS will be available as a executable binary soon. Stay tuned...
+RTFS will be available as an executable binary soon. Stay tuned...
