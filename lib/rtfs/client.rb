@@ -17,16 +17,21 @@ module RTFS
     end
 
     attr_accessor :nameservers
+    attr_accessor :access_count
     attr_accessor :appkey
     attr_accessor :uid
 
     def initialize(options)
-      # 通过 ns_addr 的地址获取负载均衡的地址
-      @nameservers = open("#{options[:ns_addr]}/tfs.list").read.split("\n")
-      @appkey = options[:appkey]
 
+
+      @appkey = options[:appkey]
+      @ns_addr = options[:ns_addr]
       @basedir = options[:basedir]
       @uid = options[:uid]
+
+      @access_count = 0
+
+      get_nameservers
 
       if @uid.nil? && !@basedir.nil?
         (Digest::MD5.hexdigest(@basedir).to_i(16) % 10000)
@@ -36,6 +41,11 @@ module RTFS
     # 获取文件
     def get(tfs_name)
       http_get("/v1/#{appkey}/#{tfs_name}")
+    end
+
+    def get_nameservers
+      # 通过 ns_addr 的地址获取负载均衡的地址
+      @nameservers = open("#{@ns_addr}/tfs.list").read.split("\n")
     end
 
     # 上传文件
@@ -177,6 +187,11 @@ module RTFS
     #
     def nameserver
       # 现在第一行是 50，表示频次，访问 50 次就要更新
+      @access_count += 1
+      if(@access_count > @nameservers[0].to_i)
+        get_nameservers
+        @access_count = 0
+      end
       @nameservers[rand(@nameservers.size - 1) + 1]
     end
 
